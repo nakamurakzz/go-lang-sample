@@ -1,8 +1,8 @@
-package main
+package chap3
 
 import "fmt"
 
-func main() {
+func slice() {
 	var s = []int{1, 2, 3, 4, 5}
 	fmt.Println(s[1:3])
 	for i := 0; i < len(s); i++ {
@@ -63,4 +63,38 @@ func main() {
 		intSet[v] = true
 	}
 	fmt.Println(intSet[11])
+}
+
+
+
+type person struct {
+	name string
+	age  int
+}
+
+func structF() {
+	bob := person{name: "Bob", age: 20}
+	fmt.Println(bob.name, bob.age)
+
+	tom := person{}
+	fmt.Println(tom)
+
+	// 無名構造体
+	p := struct {
+		name string
+		age  int
+		pet  string
+	}{
+		name: "Bob",
+		age:  20,
+		pet:  "cat",
+	}
+
+	fmt.Println(p)
+
+}
+
+func main() {
+	slice()
+	structF()
 }
