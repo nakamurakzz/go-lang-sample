@@ -1,6 +1,9 @@
-package main
+package chap7
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type MailCategory int
 
@@ -63,7 +66,70 @@ func main() {
 	m.Reports = m.FindNewEmployee()
 	fmt.Println(m.Reports)
 	fmt.Println(m.Employee.Id)
+
+	method()
 }
 
 // 埋め込まれた側は、上位のメソッドを呼び出すことができない
 // 継承ではなく、Composition的
+
+type Stringer interface {
+	String() string
+}
+
+type LogicProvider struct{}
+
+type Person struct {
+	FirsName string
+	LastName string
+	Age      int
+}
+
+// レシーバーを指定することでメソッドを定義できる
+func (p Person) FullName() string {
+	return p.FirsName + " " + p.LastName
+}
+
+func method() {
+	p := Person{"John", "Doe", 25}
+	println(p.FullName())
+
+	var c Counter
+	fmt.Println(c.String())
+	c.Increment()
+	fmt.Println(c.String())
+
+	a := Adder{start: 1}
+	fmt.Println(a.Add(2))
+
+	// メソッド値
+	am := a.Add
+	fmt.Println(am(3))
+
+	// メソッド式
+	af := Adder.Add
+	fmt.Println(af(a, 4))
+
+}
+
+type Counter struct {
+	total       int
+	lastUpdated time.Time
+}
+
+func (c *Counter) Increment() {
+	c.total++
+	c.lastUpdated = time.Now()
+}
+
+func (c Counter) String() string {
+	return fmt.Sprintf("total: %d, last updated: %s", c.total, c.lastUpdated)
+}
+
+type Adder struct {
+	start int
+}
+
+func (a Adder) Add(b int) int {
+	return a.start + b
+}
