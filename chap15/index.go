@@ -50,7 +50,7 @@ func (oi OrderableInt) Order(v interface{}) int {
 	return int(oi - v.(OrderableInt))
 }
 
-type Stack[T any] struct {
+type Stack[T comparable] struct {
 	vals []T
 }
 
@@ -68,11 +68,25 @@ func (s *Stack[T]) Pop() (T, bool) {
 	return v, true
 }
 
+func (s *Stack[T]) Contains(val T) bool {
+	for _, v := range s.vals {
+		if v == val {
+			return true
+		}
+	}
+	return false
+}
+
+func consoleLog[T any](val T) {
+	fmt.Println(val)
+}
+
 func Main(){
 	var s Stack[int]
 	s.Push(1)
 	s.Push(2)
 	s.Push(3)
+	// s.Push("hello") // これはコンパイルエラーになる
 
 	for n := 0; n < 4; n++ {
 		if v, ok := s.Pop(); ok {
@@ -81,4 +95,8 @@ func Main(){
 			fmt.Println("stack is empty")
 		}
 	}
+
+	consoleLog(1)
+	consoleLog("hello")
+	consoleLog(1.2)
 }
