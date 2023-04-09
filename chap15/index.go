@@ -1,6 +1,8 @@
 package chap15
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // ジェネリクス
 
@@ -77,6 +79,33 @@ func (s *Stack[T]) Contains(val T) bool {
 	return false
 }
 
+// アルゴリズムの抽象化
+func Map[T1, T2 any] (s []T1, f func(T1) T2) []T2 {
+	r := make([]T2, len(s))
+	for i, v := range s {
+		r[i] = f(v)
+	}
+	return r
+}
+
+func Reduce[T1, T2 any] (s []T1, f func(T2, T1) T2, init T2) T2 {
+	r := init
+	for _, v := range s {
+		r = f(r, v)
+	}
+	return r
+}
+
+func Filter[T any] (s []T, f func(T) bool) []T {
+	r := make([]T, 0, len(s))
+	for _, v := range s {
+		if f(v) {
+			r = append(r, v)
+		}
+	}
+	return r
+}
+
 func consoleLog[T any](val T) {
 	fmt.Println(val)
 }
@@ -99,4 +128,22 @@ func Main(){
 	consoleLog(1)
 	consoleLog("hello")
 	consoleLog(1.2)
+
+	words := []string{"hello", "world", "foo", "bar"}
+	fmt.Println(words)
+	filtered := Filter(words, func(s string) bool {
+		return s != "foo"
+	})
+	fmt.Println(filtered)
+
+	words2 := []int{1, 2, 3, 4, 5}
+	fmt.Println(words2)
+	mapped := Map(words2, func(s int) int {
+		return s * 10
+	})
+	fmt.Println(mapped)
+	mapped2 := Reduce(words2, func(acc int, s int) int {
+		return acc + s
+	}, 0)
+	fmt.Println(mapped2)
 }
