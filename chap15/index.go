@@ -146,4 +146,12 @@ func Main(){
 		return acc + s
 	}, 0)
 	fmt.Println(mapped2)
+
+	// これはコンパイルエラーになる
 }
+
+// 型ターム
+type BuildInType interface {
+	string | int | float64
+}
+
